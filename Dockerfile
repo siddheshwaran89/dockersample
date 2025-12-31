@@ -1,14 +1,24 @@
+# ---------- Build stage ----------
+FROM maven:3.9.9-eclipse-temurin-17 AS build
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+# ---------- Runtime stage ----------
 FROM eclipse-temurin:17-jre
 
 LABEL app=employee-app
 
 WORKDIR /target
 
-COPY target/*.jar employee-app.jar
+COPY --from=build /app/target/*.jar employee-app.jar
 
-EXPOSE 8080
+EXPOSE 9080
 
 HEALTHCHECK --interval=35s --timeout=4s \
-  CMD curl -f http://localhost:8080/ || exit 1
+  CMD curl -f http://localhost:9080/ || exit 1
 
 ENTRYPOINT ["java", "-jar", "employee-app.jar"]
