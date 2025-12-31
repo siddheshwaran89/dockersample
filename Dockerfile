@@ -1,6 +1,6 @@
 # ---------- Build stage ----------
 FROM maven:3.9.9-eclipse-temurin-17 AS build
-WORKDIR /app
+WORKDIR /target
 
 COPY pom.xml .
 COPY src ./src
@@ -22,4 +22,5 @@ HEALTHCHECK --interval=35s --timeout=4s \
   CMD curl -f http://localhost:8087/employee/test || exit 1
 
 ENTRYPOINT ["java", "-jar", "employee-app.jar"]
+
 
