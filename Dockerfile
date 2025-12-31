@@ -16,9 +16,10 @@ WORKDIR /target
 
 COPY --from=build /app/target/*.jar employee-app.jar
 
-EXPOSE 9080
+EXPOSE 8087
 
 HEALTHCHECK --interval=35s --timeout=4s \
-  CMD curl -f http://localhost:9080/ || exit 1
+  CMD curl -f http://localhost:8087/employee/test || exit 1
 
 ENTRYPOINT ["java", "-jar", "employee-app.jar"]
+
